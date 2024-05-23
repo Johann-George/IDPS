@@ -13,3 +13,12 @@ from sklearn.ensemble import RandomForestClassifier,ExtraTreesClassifier
 from sklearn.tree import DecisionTreeClassifier
 import xgboost as xgb
 from xgboost import plot_importance
+
+df = pd.read_csv('./data/CICIDS2017_sample.csv')
+
+#the code snippet identifies and returns the names of all columns in the DataFrame df that are not of type 'object', such as numerical or datetime columns.
+features = df.dtypes[df.dtypes != 'object'].index
+
+#Standardization - Mean 0
+df[features] = df[features].apply(
+    lambda x: (x - x.mean()) / (x.std()))
