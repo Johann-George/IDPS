@@ -22,3 +22,26 @@ features = df.dtypes[df.dtypes != 'object'].index
 #Standardization - Mean 0
 df[features] = df[features].apply(
     lambda x: (x - x.mean()) / (x.std()))
+
+# Fill empty values by 0
+df = df.fillna(0)
+
+#Transform output to numerical values (last column)
+labelencoder = LabelEncoder()
+df.iloc[:, -1] = labelencoder.fit_transform(df.iloc[:, -1])
+
+
+#temporarily remove minor values
+df_minor = df[(df['Label']==6)|(df['Label']==1)|(df['Label']==4)]
+df_major = df.drop(df_minor.index)
+
+
+#x=input, y=output
+X = df_major.drop(['Label'],axis=1)
+y = df_major.iloc[:, -1].values.reshape(-1,1)
+y=np.ravel(y)
+
+
+from sklearn.cluster import MiniBatchKMeans
+kmeans = MiniBatchKMeans(n_clusters=1000, random_state=0).fit(X)
+
